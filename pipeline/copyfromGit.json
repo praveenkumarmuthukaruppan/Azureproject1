@@ -1,0 +1,118 @@
+{
+	"name": "copyfromGit",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.p_json",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy git data",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "DelimitedTextSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"enableSkipIncompatibleRow": true,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DSfromgit",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_rel_url": {
+											"value": "@item().p_rel_url",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "Parquet1",
+									"type": "DatasetReference",
+									"parameters": {
+										"p_folder": {
+											"value": "@item().p_folder",
+											"type": "Expression"
+										},
+										"p_file": {
+											"value": "@item().p_file",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"p_json": {
+				"type": "array",
+				"defaultValue": [
+					{
+						"p_rel_url": "anshlambagit/AzureProjectWithCICD/refs/heads/main/Resources/athletes.csv",
+						"p_folder": "athletes",
+						"p_file": "athletes.parquet"
+					},
+					{
+						"p_rel_url": "anshlambagit/AzureProjectWithCICD/refs/heads/main/Resources/coaches.csv",
+						"p_folder": "coaches",
+						"p_file": "coaches.parquet"
+					},
+					{
+						"p_rel_url": "anshlambagit/AzureProjectWithCICD/refs/heads/main/Resources/events.csv",
+						"p_folder": "events",
+						"p_file": "events.parquet"
+					}
+				]
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2025-12-31T20:19:26Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

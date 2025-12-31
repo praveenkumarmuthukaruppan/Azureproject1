@@ -1,0 +1,9 @@
+{
+	"name": "azureprj1-df",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "5b51e0e2-aedf-4b38-b170-5541148ff335",
+		"tenantId": "f85f3eac-d046-41f8-8ba4-421a27327cbe"
+	}
+}
